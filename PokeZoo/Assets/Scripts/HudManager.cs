@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,8 @@ public class HudManager : MonoBehaviour
     [HideInInspector] private GameManager gameManager;
 
     [Header("Characters")]
-    [HideInInspector] public GameObject player;
-    [HideInInspector] public GameObject animal;
+    [HideInInspector] public CharacterItem player;
+    [HideInInspector] public CharacterItem animal;
 
     [Header("Health")]
     [SerializeField] public int HealthPlayer = 100;
@@ -18,6 +19,8 @@ public class HudManager : MonoBehaviour
     [SerializeField] public Text healthTextAnimal;
 
     [Header("Characters")]
+    [SerializeField] public SpriteRenderer playerSprite;
+    [SerializeField] public SpriteRenderer animalSprite;
     [SerializeField] public Text playerNameText;
     [SerializeField] public Text animalNameText;
 
@@ -45,9 +48,11 @@ public class HudManager : MonoBehaviour
     }
     public void UpdateTexts()
     {
-        playerNameText.text = gameManager.player.name;
-        if (gameManager.animal)
-            animalNameText.text = gameManager.animal.name;
+        if (player)
+            playerNameText.text = player.itemName;
+
+        if (animal)
+            animalNameText.text = animal.itemName;
 
         healthTextPlayer.text = HealthPlayer.ToString() + "/100";
         healthTextAnimal.text = HealthAnimal.ToString() + "/100";
@@ -131,7 +136,7 @@ public class HudManager : MonoBehaviour
         {
             animalIsAngry = false;
         }
-        animal.GetComponent<Animator>().SetBool("Angry", animalIsAngry);
+        animalSprite.GetComponent<Animator>().SetBool("Angry", animalIsAngry);
     }
     private void HandleCreateItem()
     {
@@ -153,7 +158,7 @@ public class HudManager : MonoBehaviour
         btn_Fugir.interactable = interactable;
     }
 
-    private void TakeDamage(GameObject victim)
+    private void TakeDamage(CharacterItem victim)
     {
         if (victim == player && HealthAnimal != 0)
         {
@@ -165,7 +170,7 @@ public class HudManager : MonoBehaviour
         }
     }
 
-    private void BlockDamage(GameObject victim)
+    private void BlockDamage(CharacterItem victim)
     {
         if (victim == player)
         {
@@ -177,13 +182,14 @@ public class HudManager : MonoBehaviour
         }
     }
 
-    private void HandleDamage(GameObject victim, int damageAngry, int damageNormal)
+    private void HandleDamage(CharacterItem victim, int damageAngry, int damageNormal)
     {
-        victim.GetComponent<Animator>().Play("TakeDamage");
+
         audioSource.PlayOneShot(damageClips[0]);
         int damage = animalIsAngry ? damageAngry : damageNormal;
         if (victim == player)
         {
+            playerSprite.GetComponent<Animator>().Play("TakeDamage");
             HealthPlayer -= damage;
             if (HealthPlayer <= 0)
             {
@@ -193,6 +199,7 @@ public class HudManager : MonoBehaviour
         }
         if (victim == animal)
         {
+            animalSprite.GetComponent<Animator>().Play("TakeDamage");
             HealthAnimal -= damage;
             if (HealthAnimal <= 0)
             {
@@ -203,14 +210,21 @@ public class HudManager : MonoBehaviour
         UpdateTexts();
     }
 
-    private void HandleBlockDamage(GameObject victim)
+    private void HandleBlockDamage(CharacterItem victim)
     {
-        victim.GetComponent<Animator>().Play("BlockDamage");
+        if (victim == player)
+        {
+            playerSprite.GetComponent<Animator>().Play("BlockDamage");
+        }
+        if (victim == animal)
+        {
+            animalSprite.GetComponent<Animator>().Play("BlockDamage");
+        }
         audioSource.PlayOneShot(damageClips[0]);
         UpdateTexts();
     }
 
-    public void HealDamage(GameObject victim)
+    public void HealDamage(CharacterItem victim)
     {
         if (victim == player)
         {
@@ -221,18 +235,19 @@ public class HudManager : MonoBehaviour
             HandleHealDamage(victim, 14);
         }
     }
-        private void HandleHealDamage(GameObject victim, int healAmount)
+    private void HandleHealDamage(CharacterItem victim, int healAmount)
     {
-        victim.GetComponent<Animator>().Play("HealDamage");
         audioSource.PlayOneShot(damageClips[0]);
         if (victim == player)
         {
+            playerSprite.GetComponent<Animator>().Play("HealDamage");
             HealthPlayer += healAmount;
             if (HealthPlayer >= 100)
                 HealthPlayer = 100;
         }
         if (victim == animal && !animalIsDefending)
         {
+            animalSprite.GetComponent<Animator>().Play("HealDamage");
             HealthAnimal += healAmount;
             if (HealthAnimal >= 100)
                 HealthAnimal = 100;

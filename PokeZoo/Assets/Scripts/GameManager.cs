@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,19 +19,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform spawnAnimal;
 
     [Header("Lists")]
-    [SerializeField] private List<string> players = new List<string> { "Menino", "Menina" };
-    [SerializeField] private List<string> animais = new List<string> { "Arara-Azul", "Ema", "Tucano" };
+    [SerializeField] private List<CharacterItem> players = new List<CharacterItem>();
+    [SerializeField] private List<CharacterItem> animais = new List<CharacterItem>();
 
     [Header("Current Selection")]
-    [SerializeField] private string currentPlayer;
+    [SerializeField] private int currentPlayer;
     [SerializeField] private int currentAnimal;
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
     [SerializeField] private Image fadeImage;
 
-    public GameObject player;
-    public GameObject animal;
+    public GameObject walkingPlayer;
 
     private void Start()
     {
@@ -50,9 +51,11 @@ public class GameManager : MonoBehaviour
         currentAnimal = Random.Range(0, animais.Count);
     }
 
-    public IEnumerator CreateFight(string animalPrefabName)
+    public IEnumerator CreateFight(CharacterItem animalItem)
     {
         yield return StartCoroutine(SetupFadeImage(true));
+
+        DestroyPlayerAndAnimal();
 
         gameplayManager.SetActive(false);
         menuManager.SetActive(false);
@@ -62,24 +65,19 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
-        InstantiateAnimal(animalPrefabName);
+        InstantiateAnimal(animalItem, players[currentPlayer]);
 
-        SetupHudManager();
         yield return StartCoroutine(SetupFadeImage(false));
     }
-
-    private void InstantiateAnimal(string animalPrefabName)
-    {
-        animal = Instantiate(Resources.Load<GameObject>("Prefabs/Animais/" + animalPrefabName), spawnAnimal);
-        player.name = player.name;
-        animal.name = animalPrefabName;
-    }
-
-    private void SetupHudManager()
+    private void InstantiateAnimal(CharacterItem animalItem, CharacterItem playerItem)
     {
         hudManager.gameObject.SetActive(true);
-        hudManager.player = player;
-        hudManager.animal = animal;
+        hudManager.animal = animalItem;
+        hudManager.player = playerItem;
+        hudManager.animalNameText.text = animalItem.itemName;
+        hudManager.playerNameText.text = playerItem.itemName;
+        hudManager.animalSprite.sprite = animalItem.itemIcon;
+        hudManager.playerSprite.sprite = playerItem.itemIcon;
         hudManager.HealthAnimal = 100;
         hudManager.HealthPlayer = 100;
         hudManager.UpdateTexts();
@@ -123,14 +121,14 @@ public class GameManager : MonoBehaviour
 
     private void DestroyPlayerAndAnimal()
     {
-        if (player) Destroy(player);
-        if (animal) Destroy(animal);
+        if (walkingPlayer) 
+            Destroy(walkingPlayer);
     }
 
     private void InstantiatePlayer()
     {
-        player = Instantiate(Resources.Load<GameObject>("Prefabs/Players/" + currentPlayer), cameraSpawn);
-        player.transform.parent = null;
+        walkingPlayer = Instantiate(Resources.Load<GameObject>("Prefabs/Players/Entity_0" + currentPlayer), cameraSpawn);
+        walkingPlayer.transform.parent = null;
     }
 
     public IEnumerator EnterMenu()
@@ -151,9 +149,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(EndFight());
     }
 
-    public void ChoosePlayer(string namePlayer)
+    public void ChoosePlayer(int playerNumber)
     {
-        currentPlayer = namePlayer;
+        currentPlayer = playerNumber;
         gameplayManager.SetActive(true);
         InstantiatePlayer();
         menuManager.SetActive(false);

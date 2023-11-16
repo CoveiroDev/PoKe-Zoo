@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Moita : MonoBehaviour
 {
+    public Spawn spawn;
+    private void OnEnable()
+    {
+        spawn = FindAnyObjectByType<Spawn>();
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         PlayerManager playerManager = other.GetComponent<PlayerManager>();
@@ -12,7 +17,7 @@ public class Moita : MonoBehaviour
         if (playerManager != null)
         {
             gameManager.FindFight();
-            Destroy(gameObject);
+            Destroy(spawn.spawnedObject);
         }
     }
 }

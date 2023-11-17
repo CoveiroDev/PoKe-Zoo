@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Arara Azul
   itemIcon: {fileID: 21300000, guid: f96ff439ab475c44b9809d24ac201b84, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: a73a8162bf5c39a46958c3b600916cf2, type: 3}

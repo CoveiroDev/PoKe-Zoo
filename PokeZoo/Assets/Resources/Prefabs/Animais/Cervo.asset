@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Cervo
   itemIcon: {fileID: 21300000, guid: f94a2b91c89cc9046bbced8cdb2ef260, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: 5d49040f63d5cb347b47d208b75a0d39, type: 3}

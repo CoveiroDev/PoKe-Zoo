@@ -7,5 +7,5 @@ public class CharacterItem : ScriptableObject
 {
     public string itemName;
     public Sprite itemIcon;
-    public int itemID;
+    public Sprite itemPlaca;
 }

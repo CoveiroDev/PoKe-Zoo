@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform spawnAnimal;
 
     [Header("Lists")]
+    [SerializeField] private Image placaManager;
     [SerializeField] private List<CharacterItem> players = new List<CharacterItem>();
     [SerializeField] private List<CharacterItem> animais = new List<CharacterItem>();
 
@@ -46,6 +45,7 @@ public class GameManager : MonoBehaviour
         gameplayManager.SetActive(false);
         choosePlayerManager.SetActive(false);
         battleManager.SetActive(false);
+        placaManager.enabled = false;
 
 
         currentAnimal = Random.Range(0, animais.Count);
@@ -109,11 +109,20 @@ public class GameManager : MonoBehaviour
 
         DestroyPlayerAndAnimal();
 
-        menuManager.SetActive(false);
-        hudManager.gameObject.SetActive(false);
-        gameplayManager.SetActive(true);
-        battleManager.SetActive(false);
 
+        hudManager.audioSource.PlayOneShot(hudManager.damageClips[0]);
+        placaManager.enabled = true;
+        placaManager.sprite = hudManager.animal.itemPlaca;
+        placaManager.preserveAspect = true;
+
+
+        yield return new WaitForSeconds(10);
+
+        menuManager.SetActive(false);
+        battleManager.SetActive(false);
+        hudManager.gameObject.SetActive(false);
+        placaManager.enabled = false;
+        gameplayManager.SetActive(true);
         InstantiatePlayer();
 
         yield return StartCoroutine(SetupFadeImage(false));

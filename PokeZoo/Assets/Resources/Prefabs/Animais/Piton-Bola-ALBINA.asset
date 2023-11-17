@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbabf45e92891444b376f9b707c8d5a, type: 3}
   m_Name: Piton-Bola-ALBINA
   m_EditorClassIdentifier: 
-  itemName: Piton-Bola-ALBINA
+  itemName: Pinton Bola
   itemIcon: {fileID: 21300000, guid: bc27b5507bcb515429fece668eedfc43, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: e114b93d183436f4f884a7af501c4803, type: 3}

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Tucano
   itemIcon: {fileID: 21300000, guid: bfd99ea9bda1dd645a1dc3d6dc50c0a7, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: 87059e75f3e288246bdfa795afdbe689, type: 3}

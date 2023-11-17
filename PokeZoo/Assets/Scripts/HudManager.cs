@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,8 +29,8 @@ public class HudManager : MonoBehaviour
     [SerializeField] public Button btn_Fugir;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip[] damageClips;
+    [SerializeField] public AudioSource audioSource;
+    [SerializeField] public AudioClip[] damageClips;
 
     [Header("Combat")]
     [SerializeField] private bool animalIsAngry;

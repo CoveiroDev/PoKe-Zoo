@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Carpa
   itemIcon: {fileID: 21300000, guid: ca510f7a585c2e041815c24b119febc1, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: 34aadbf1aef0fca4d852f7e1ae23abe3, type: 3}

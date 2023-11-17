@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbabf45e92891444b376f9b707c8d5a, type: 3}
   m_Name: Morucututu-De-Barriga-Amarela
   m_EditorClassIdentifier: 
-  itemName: Morucututu-De-Barriga-Amarela
+  itemName: Morucututu
   itemIcon: {fileID: 21300000, guid: b310654dc310c054193335369d6010ad, type: 3}
-  itemID: 0
+  itemPlaca: {fileID: 21300000, guid: 4dacb7537e34b474e84e7233333a6eaa, type: 3}
